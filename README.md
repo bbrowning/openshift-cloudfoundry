@@ -3,8 +3,7 @@
 Note: As of right now, this only supports the java-buildpack. Support
 for more will be added in the future.
 
-## Deploying a locally built app using the CloudFoundry compatibility
-   image
+## Deploying a locally built Java application
 
 This emulates the `cf push target/some-app.jar` command in
 CloudFoundry. Replace target/some-app.jar with any executable jar or
@@ -30,7 +29,7 @@ command and the application will redeploy after the new build
 finishes.
 
 
-# Developing & Testing Changes Locally
+## Testing changes to this Docker image on OpenShift
 
 First, clone this repository and `cd` into the newly cloned repo.
 
