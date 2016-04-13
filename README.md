@@ -1,7 +1,14 @@
-# CloudFoundry Buildpack Compatibility Docker Image for OpenShift
+# CloudFoundry Buildpacks on OpenShift
 
-Note: As of right now, this only supports the java-buildpack. Support
-for more will be added in the future.
+This repository contains the source for the
+`bbrowning/openshift-cloudfoundry` Docker image which lets you run
+applications that use CloudFoundry buildpacks on top of OpenShift 3.
+
+**Note:** As of right now, this only supports the
+java-buildpack. Support for the other CloudFoundry-provided buildpacks
+as well as custom buildpacks will be added in the future.
+
+Please report any bugs you find via GitHub issues.
 
 ## Deploying a locally built Java application
 
