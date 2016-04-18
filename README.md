@@ -4,9 +4,9 @@ This repository contains the source for the
 `bbrowning/openshift-cloudfoundry` Docker image which lets you run
 applications that use CloudFoundry buildpacks on top of OpenShift 3.
 
-**Note:** As of right now, this only supports the
-java-buildpack. Support for the other CloudFoundry-provided buildpacks
-as well as custom buildpacks will be added in the future.
+**Note:** As of right now, this only supports the Java and Node.js
+buildpacks. Support for the other CloudFoundry-provided buildpacks as
+well as custom buildpacks will be added in the future.
 
 Please report any bugs you find via GitHub issues.
 
@@ -34,6 +34,13 @@ to lookup the hostname and copy/paste that into your browser to test.
 After making changes to the app locally, just run the `oc start-build`
 command and the application will redeploy after the new build
 finishes.
+
+
+## Deploying the CloudFoundry sample Node application
+
+    oc new-app bbrowning/openshift-cloudfoundry~https://github.com/cloudfoundry-samples/cf-sample-app-nodejs.git
+    oc logs -f bc/cf-sample-app-nodejs
+    oc expose svc/cf-sample-app-nodejs
 
 
 ## Testing changes to this Docker image on OpenShift

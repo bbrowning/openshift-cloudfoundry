@@ -39,7 +39,7 @@ RUN curl --silent -L https://github.com/gliderlabs/herokuish/releases/download/v
 
 
 
-# CloudFoundry-specific environment variables
+# CloudFoundry Java buildpack environment variables
 ENV JAVA_BUILDPACK_VERSION=3.3.1 \
     OPENJDK_VERSION=1.8.0_60 \
     MEMORY_CALC_VERSION=2.0.0_RELEASE \
@@ -60,10 +60,24 @@ RUN wget -nv -O $BUILDPACK_PATH/java-buildpack/resources/cache/https%3A%2F%2Fdow
 RUN wget -nv -O $BUILDPACK_PATH/java-buildpack/resources/cache/https%3A%2F%2Fdownload.run.pivotal.io%2Fmemory-calculator%2Fcentos6%2Fx86_64%2Fmemory-calculator-${MEMORY_CALC_VERSION}.tar.gz.cached "https://download.run.pivotal.io/memory-calculator/centos6/x86_64/memory-calculator-${MEMORY_CALC_VERSION}.tar.gz" \
     && echo -e "---\n${MEMORY_CALC_VERSION}: https://download.run.pivotal.io/memory-calculator/centos6/x86_64/memory-calculator-${MEMORY_CALC_VERSION}.tar.gz" > $BUILDPACK_PATH/java-buildpack/resources/cache/https%3A%2F%2Fdownload.run.pivotal.io%2Fmemory-calculator%2Fcentos7%2Fx86_64%2Findex.yml.cached
 
+
+
+# CloudFoundry Node buildpack environment variables
+ENV NODE_BUILDPACK_VERSION=1.5.11 \
+    CF_STACK=cflinuxfs2
+
+# Install the CloudFoundry NodeJS buildpack
+RUN mkdir -p $BUILDPACK_PATH/node-buildpack \
+    && wget -nv -O /tmp/node-buildpack.zip "https://github.com/cloudfoundry/nodejs-buildpack/releases/download/v${NODE_BUILDPACK_VERSION}/nodejs_buildpack-cached-v${NODE_BUILDPACK_VERSION}.zip" \
+    && unzip /tmp/node-buildpack.zip -d $BUILDPACK_PATH/node-buildpack/
+
+
+
+# Tie up loose ends and create our OpenShift S2I scripts
 RUN mkdir -p /opt/s2i/destination/src \
     && chmod -R go+rw /opt/s2i/destination \
     && mkdir -p $STI_SCRIPTS_PATH \
-    && echo 'cp -rf /opt/s2i/destination/src/. $APP_PATH;unzip -o $APP_PATH/*.?ar -d $APP_PATH || true;/build' > $STI_SCRIPTS_PATH/assemble \
+    && echo 'cp -rf /opt/s2i/destination/src/. $APP_PATH;if [ -f *.?ar ]; then unzip -o $APP_PATH/*.?ar -d $APP_PATH;fi;/build' > $STI_SCRIPTS_PATH/assemble \
     && echo '/start web' > $STI_SCRIPTS_PATH/run \
     && chmod +x $STI_SCRIPTS_PATH/* \
     && mkdir -p $APP_PATH \
