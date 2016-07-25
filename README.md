@@ -1,11 +1,11 @@
-# CloudFoundry Buildpacks on OpenShift
+# Cloud Foundry Applications (and buildpacks) on OpenShift
 
 This repository contains the source for the
 `bbrowning/openshift-cloudfoundry` Docker image which lets you run
-applications that use CloudFoundry buildpacks on top of OpenShift 3.
+applications that use Cloud Foundry buildpacks on top of OpenShift 3.
 
 **Note:** As of right now, this only supports the Java and Node.js
-buildpacks. Support for the other CloudFoundry-provided buildpacks as
+buildpacks. Support for the other Cloud Foundry-provided buildpacks as
 well as custom buildpacks will be added in the future.
 
 Please report any bugs you find via GitHub issues.
@@ -13,7 +13,7 @@ Please report any bugs you find via GitHub issues.
 ## Deploying a locally built Java application
 
 This emulates the `cf push target/some-app.jar` command in
-CloudFoundry. Replace target/some-app.jar with any executable jar or
+Cloud Foundry. Replace target/some-app.jar with any executable jar or
 deployable war file. Read
 https://github.com/cloudfoundry/java-buildpack/blob/master/README.md
 for more information on supported application types.
@@ -36,7 +36,7 @@ command and the application will redeploy after the new build
 finishes.
 
 
-## Deploying the CloudFoundry sample Node application
+## Deploying the Cloud Foundry sample Node application
 
     oc new-app bbrowning/openshift-cloudfoundry~https://github.com/cloudfoundry-samples/cf-sample-app-nodejs.git
     oc logs -f bc/cf-sample-app-nodejs
