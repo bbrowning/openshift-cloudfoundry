@@ -77,7 +77,7 @@ RUN mkdir -p $BUILDPACK_PATH/node-buildpack \
 RUN mkdir -p /opt/s2i/destination/src \
     && chmod -R go+rw /opt/s2i/destination \
     && mkdir -p $STI_SCRIPTS_PATH \
-    && echo 'cp -rf /opt/s2i/destination/src/. $APP_PATH;if [ -f *.?ar ]; then unzip -o $APP_PATH/*.?ar -d $APP_PATH;fi;/build' > $STI_SCRIPTS_PATH/assemble \
+    && echo 'cp -rf /opt/s2i/destination/src/. $APP_PATH;if [ -f $APP_PATH/*.?ar ]; then unzip -o $APP_PATH/*.?ar -d $APP_PATH;fi;/build' > $STI_SCRIPTS_PATH/assemble \
     && echo '/start web' > $STI_SCRIPTS_PATH/run \
     && chmod +x $STI_SCRIPTS_PATH/* \
     && mkdir -p $APP_PATH \
