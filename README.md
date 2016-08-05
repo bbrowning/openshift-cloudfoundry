@@ -18,7 +18,11 @@ deployable war file. Read
 https://github.com/cloudfoundry/java-buildpack/blob/master/README.md
 for more information on supported application types.
 
-    oc new-build bbrowning/openshift-cloudfoundry --binary=true --name=cf-test
+**Note:** The `-docker19` suffix here is temporary until OpenShift
+  and/or the Red Hat CDK update to a newer Docker version that can
+  consume automated builds from Docker Hub again.
+
+    oc new-build bbrowning/openshift-cloudfoundry-docker19 --binary=true --name=cf-test
     oc start-build cf-test --from-file=target/some-app.jar
     oc logs -f bc/cf-test
 
@@ -38,7 +42,7 @@ finishes.
 
 ## Deploying the Cloud Foundry sample Node application
 
-    oc new-app bbrowning/openshift-cloudfoundry~https://github.com/cloudfoundry-samples/cf-sample-app-nodejs.git
+    oc new-app bbrowning/openshift-cloudfoundry-docker19~https://github.com/cloudfoundry-samples/cf-sample-app-nodejs.git
     oc logs -f bc/cf-sample-app-nodejs
     oc expose svc/cf-sample-app-nodejs
 
@@ -54,3 +58,21 @@ First, clone this repository and `cd` into the newly cloned repo.
 Then, use `cloudfoundryish` instead of
 `bbrowning/openshift-cloudfoundry` to subsequent `oc new-build`
 commands to use the locally changed image.
+
+
+## Releasing new versions of this image to Docker Hub
+
+Automated builds are performed on every commit of this repo to the
+`bbrowning/openshift-cloudfoundry` Docker repository.
+
+However, there's an additional repository that needs to be manually
+updated for Docker 1.9 users of
+`bbrowning/openshift-cloudfoundry-docker19`. To do that from inside
+the Red Hat CDK:
+
+    git clone git clone https://github.com/bbrowning/openshift-cloudfoundry
+    cd openshift-cloudfoundry
+    docker build -t bbrowning/openshift-cloudfoundry-docker19 .
+    docker tag bbrowning/openshift-cloudfoundry-docker19 registry-1.docker.io/bbrowning/openshift-cloudfoundry-docker19
+    docker login registry-1.docker.io
+    docker push registry-1.docker.io/bbrowning/openshift-cloudfoundry-docker19
