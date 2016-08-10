@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Setup VCAP_APPLICATION, VCAP_SERVICES, and other env varsb
+. $STI_SCRIPTS_PATH/vcap_env
+
+# Run the herokuish start script with web process type
+/start web

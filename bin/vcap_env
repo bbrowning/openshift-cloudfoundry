@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Short-circuit if this ends up getting run twice
+if [ "x$VCAP_APPLICATION" != "x" ]; then
+    exit 0
+fi
+
+instance_id=`hostname`
+instance_index=`hostname | rev | cut -d "-" -f 2 | rev`
+application_name=`hostname | rev | cut -d "-" -f 3- | rev`
+space_name=`cat /var/run/secrets/kubernetes.io/serviceaccount/namespace`
+uptime=`uptime -s`
+started_at=`date -Rd "${uptime}"`
+started_at_timestamp=`date -d "${uptime}" "+%s"`
+uris="[]"
+
+memory_limit=$MEMORY_LIMIT
+for i in "g G m M k K"; do
+    memory_limit=${memory_limit//[gG]/*1024}
+    memory_limit=${memory_limit//[mM]/}
+    memory_limit=${memory_limit//[kK]/\/1024}
+done
+memory_limit=$((memory_limit))
+disk_limit="102400"
+limits="{\"mem\": ${memory_limit}, \"disk\": ${disk_limit}}"
+
+export VCAP_APPLICATION="{
+  \"instance_id\": \"${instance_id}\",
+  \"instance_index\": \"${instance_index}\",
+  \"application_name\": \"${application_name}\",
+  \"name\": \"${application_name}\",
+  \"space_name\": \"${space_name}\",
+  \"start\": \"${started_at}\",
+  \"started_at\": \"${started_at}\",
+  \"started_at_timestamp\": \"${started_at_timestamp}\",
+  \"application_uris\": ${uris},
+  \"uris\": ${uris},
+  \"limits\": ${limits}
+}"
+
+export CF_INSTANCE_INDEX=${instance_index}
+export INSTANCE_INDEX=${instance_index}

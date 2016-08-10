@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Copy the application sources to the expected directory
+cp -rf /opt/s2i/destination/src/. $APP_PATH
+
+# Explode and war or jar files
+if [ -f $APP_PATH/*.?ar ]; then
+    unzip -o $APP_PATH/*.?ar -d $APP_PATH
+fi
+
+# Run the herokuish build script
+/build

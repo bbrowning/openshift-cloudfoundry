@@ -72,13 +72,13 @@ RUN mkdir -p $BUILDPACK_PATH/node-buildpack \
     && unzip /tmp/node-buildpack.zip -d $BUILDPACK_PATH/node-buildpack/
 
 
+# Copy our OpenShift S2I scripts
+RUN mkdir -p $STI_SCRIPTS_PATH
+COPY bin/assemble bin/run bin/vcap_env /${STI_SCRIPTS_PATH}/
 
-# Tie up loose ends and create our OpenShift S2I scripts
+# Tie up loose ends
 RUN mkdir -p /opt/s2i/destination/src \
     && chmod -R go+rw /opt/s2i/destination \
-    && mkdir -p $STI_SCRIPTS_PATH \
-    && echo 'cp -rf /opt/s2i/destination/src/. $APP_PATH;if [ -f $APP_PATH/*.?ar ]; then unzip -o $APP_PATH/*.?ar -d $APP_PATH;fi;/build' > $STI_SCRIPTS_PATH/assemble \
-    && echo '/start web' > $STI_SCRIPTS_PATH/run \
     && chmod +x $STI_SCRIPTS_PATH/* \
     && mkdir -p $APP_PATH \
     && chown -R $USER:$USER $APP_PATH \
@@ -93,7 +93,7 @@ RUN mkdir -p /opt/s2i/destination/src \
 RUN mkdir -p $HOME/bin \
     && echo '' > $HOME/bin/usermod \
     && echo '' > $HOME/bin/chown \
-    && echo 'shift;$@' > $HOME/bin/setuidgid \
+    && echo -e 'shift\n$@' > $HOME/bin/setuidgid \
     && chmod +x $HOME/bin/*
 
 # Uncomment to enable debug logging for buildpacks

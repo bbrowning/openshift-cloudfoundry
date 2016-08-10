@@ -23,8 +23,7 @@ for more information on supported application types.
   consume automated builds from Docker Hub again.
 
     oc new-build bbrowning/openshift-cloudfoundry-docker19 --binary=true --name=cf-test
-    oc start-build cf-test --from-file=target/some-app.jar
-    oc logs -f bc/cf-test
+    oc start-build cf-test --from-file=target/some-app.jar --follow
 
 Once the initial build is done, create a new application from this
 image and expose it to the outside world.
@@ -42,8 +41,7 @@ finishes.
 
 ## Deploying the Cloud Foundry sample Node application
 
-    oc new-app bbrowning/openshift-cloudfoundry-docker19~https://github.com/cloudfoundry-samples/cf-sample-app-nodejs.git
-    oc logs -f bc/cf-sample-app-nodejs
+    oc new-app bbrowning/openshift-cloudfoundry-docker19~https://github.com/cloudfoundry-samples/cf-sample-app-nodejs.git --follow
     oc expose svc/cf-sample-app-nodejs
 
 
@@ -52,8 +50,7 @@ finishes.
 First, clone this repository and `cd` into the newly cloned repo.
 
     oc new-build --binary=true --name=cloudfoundryish
-    oc start-build cloudfoundryish --from-file=Dockerfile
-    oc logs -f bc/cloudfoundryish
+    oc start-build cloudfoundryish --from-dir=. --follow
 
 Then, use `cloudfoundryish` instead of
 `bbrowning/openshift-cloudfoundry` to subsequent `oc new-build`
