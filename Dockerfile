@@ -93,7 +93,7 @@ RUN mkdir -p /opt/s2i/destination/src \
 RUN mkdir -p $HOME/bin \
     && echo '' > $HOME/bin/usermod \
     && echo '' > $HOME/bin/chown \
-    && echo -e 'shift\n$@' > $HOME/bin/setuidgid \
+    && echo -e 'shift\neval "$@"' > $HOME/bin/setuidgid \
     && chmod +x $HOME/bin/*
 
 # Uncomment to enable debug logging for buildpacks

@@ -38,5 +38,8 @@ export VCAP_APPLICATION="{
   \"limits\": ${limits}
 }"
 
+export VCAP_SERVICES="{
+}"
+
 export CF_INSTANCE_INDEX=${instance_index}
 export INSTANCE_INDEX=${instance_index}
