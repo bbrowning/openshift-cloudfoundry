@@ -1,7 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
-# Setup VCAP_APPLICATION, VCAP_SERVICES, and other env varsb
+# Setup VCAP_APPLICATION, VCAP_SERVICES, and other env vars
 . $STI_SCRIPTS_PATH/vcap_env
 
-# Run the herokuish start script with web process type
-/start web
+if [ "x$CF_COMMAND" != "x" ]; then
+    /bin/herokuish procfile exec '"$CF_COMMAND"'
+    exit 0
+else
+    # Run the herokuish start script with web process type
+    /start web    
+fi

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copy the application sources to the expected directory
 cp -rf /opt/s2i/destination/src/. $APP_PATH

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Short-circuit if this ends up getting run twice
 if [ "x$VCAP_APPLICATION" != "x" ]; then
@@ -24,6 +24,9 @@ memory_limit=$((memory_limit))
 disk_limit="102400"
 limits="{\"mem\": ${memory_limit}, \"disk\": ${disk_limit}}"
 
+export CF_INSTANCE_INDEX=${instance_index}
+export INSTANCE_INDEX=${instance_index}
+
 export VCAP_APPLICATION="{
   \"instance_id\": \"${instance_id}\",
   \"instance_index\": \"${instance_index}\",
@@ -38,8 +41,35 @@ export VCAP_APPLICATION="{
   \"limits\": ${limits}
 }"
 
-export VCAP_SERVICES="{
-}"
-
-export CF_INSTANCE_INDEX=${instance_index}
-export INSTANCE_INDEX=${instance_index}
+services_json="{"
+needs_comma=false
+for service in $CF_BOUND_SERVICES; do
+    service_host="${service}_SERVICE_HOST"
+    service_port="${service}_SERVICE_PORT"
+    service_label="${service}_LABEL"
+    service_user="${service}_USER"
+    service_password="${service}_PASSWORD"
+    service_database="${service}_DATABASE"
+    if [ "x${!service_label}" != "x" ]; then
+        if [ "$needs_comma" = true ]; then
+            services_json="$services_json, "
+        fi
+        services_json="$services_json \"${!service_label}\":
+          [{
+            \"name\": \"${!service_label}\",
+            \"credentials\": {
+              \"hostname\": \"${!service_host}\",
+              \"port\": ${!service_port},
+              \"username\": \"${!service_user}\",
+              \"password\": \"${!service_password}\",
+              \"name\": \"${!service_database}\"
+            }
+          }]"
+        needs_comma=true
+        if [ "x${!service_database}" != "x" ]; then
+            export DATABASE_URL="${!service_label}://${!service_user}:${!service_password}@${!service_host}:${!service_port}/${!service_database}/"
+        fi
+    fi
+done
+services_json="$services_json }"
+export VCAP_SERVICES="$services_json"
