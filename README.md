@@ -4,9 +4,16 @@ This repository contains the source for the
 `bbrowning/openshift-cloudfoundry` Docker image which lets you run
 applications that use Cloud Foundry buildpacks on top of OpenShift 3.
 
-**Note:** As of right now, this only supports the Java and Node.js
-buildpacks. Support for the other Cloud Foundry-provided buildpacks as
-well as custom buildpacks will be added in the future.
+If you're interested in running Cloud Foundry applications on
+OpenShift then you should also check out
+https://github.com/bbrowning/ocf. That's a command-line tool that
+emulates `cf push` but deploys the applications to OpenShift instead
+of Cloud Foundry.
+
+**Note:** As of right now, this only bundles the Java, Node.js, and
+Ruby buildpacks. Custom buildpacks can be provided by setting the
+`BUILDPACK_URL` environment variable in the build and deployment
+configurations.
 
 Please report any bugs you find via GitHub issues.
 
