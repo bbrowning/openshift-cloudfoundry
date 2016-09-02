@@ -57,6 +57,8 @@ for service in $CF_BOUND_SERVICES; do
         services_json="$services_json \"${!service_label}\":
           [{
             \"name\": \"${!service_label}\",
+            \"label\": \"${!service_label}\",
+            \"plan\": \"\",
             \"credentials\": {
               \"hostname\": \"${!service_host}\",
               \"port\": ${!service_port},
